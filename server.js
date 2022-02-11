@@ -5,6 +5,7 @@ const projectData = {}
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+require('dotenv').config()
 // Start up an instance of app
 const app = express()
 /* Middleware*/
@@ -17,5 +18,6 @@ app.use(bodyParser.json());
 // Initialize the main project folder
 app.use(express.static('website'));
 
-
 // Setup Server
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log(`listening to port ${port}`))
