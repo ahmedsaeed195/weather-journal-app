@@ -8,6 +8,13 @@ let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear()
 // Define global variable location which holds the geolocation coords of the user
 let locationData = []
 
+const data = {
+    date: '',
+    temp: '',
+    zip: '',
+    feelings: ''
+}
+
 function getLocation() {
     //#region Handlers for geo location
     const setPosition = (position) => {
@@ -48,6 +55,33 @@ async function getWeatherData() {
 //     getWeatherData()
 // }, 2000)
 
-function generate() {
-    console.log('generated!!')
+//Submit button handler
+async function submit() {
+    const updateView = () => {
+
+    }
+    try {
+        const request = await fetch('/', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+//Zip code input change handler
+function zipChange(value) {
+    data.zip = value
+    console.log(data)
+}
+
+//Filter Zip code field to only accept numerical values
+function zipFilter(target) {
+    target.value = target.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1')
+}
+
+function feelingsChange(value) {
+    data.feelings = value
+    console.log(data)
 }

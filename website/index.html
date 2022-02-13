@@ -15,12 +15,12 @@
     </div>
     <div class="holder zip">
       <label for="zip">Enter Zipcode here</label>
-      <input type="text" id="zip" placeholder="enter zip code here">
+      <input type="text" oninput="zipFilter(this)" id="zip" placeholder="enter zip code here" onchange="zipChange(this.value)">
     </div>
     <div class="holder feel">
       <label for="feelings">How are you feeling today?</label>
-      <textarea class="myInput" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
-      <button id="generate" type="submit" onclick="generate()"> Generate </button>
+      <textarea class="myInput" id="feelings" onchange="feelingsChange(this.value)" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
+      <button id="generate" type="submit" onclick="submit()"> Generate </button>
     </div>
     <div class="holder entry">
       <div class="title">Most Recent Entry</div>
