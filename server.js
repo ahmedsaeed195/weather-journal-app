@@ -19,11 +19,23 @@ app.use(cors())
 // Initialize the main project folder
 app.use(express.static('website'));
 
-// Server Routes
+//#region Server Routes
+//Load view on default URL
 app.get('/', async (req, res) => {
     res.sendFile('index.html')
 })
-
+//Get last entry method
+app.get('/all', (req, res) => {
+    return res.status('200').json(projectData)
+})
+//Post data method
+app.post('/', (req, res) => {
+    const data = req.body
+    projectData = data
+    return res.status('201').json({
+        message: 'Data Saved'
+    })
+})
 // Setup Server
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening to port ${port}`))
