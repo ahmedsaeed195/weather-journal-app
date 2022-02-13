@@ -19,6 +19,11 @@ app.use(cors())
 // Initialize the main project folder
 app.use(express.static('website'));
 
+// Server Routes
+app.get('/', async (req, res) => {
+    res.sendFile('index.html')
+})
+
 // Setup Server
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening to port ${port}`))
