@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-const projectData = {}
+let projectData = {}
 
 // Require Express to run server and routes
 const express = require('express')
@@ -26,6 +26,7 @@ app.get('/', async (req, res) => {
 })
 //Get last entry method
 app.get('/all', (req, res) => {
+    console.log(projectData)
     return res.status('200').json(projectData)
 })
 //Post data method
