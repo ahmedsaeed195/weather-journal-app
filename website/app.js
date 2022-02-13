@@ -4,12 +4,12 @@ const url = 'https://api.openweathermap.org/data/2.5/weather?'
 const apiKey = '&appid=cad65a6773ad842cc52fd7ea5acc6cd1&units=metric'
 // Create a new date instance dynamically with JS
 let d = new Date()
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear()
+let newDate = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
 // Define global variable location which holds the geolocation coords of the user
 let locationData = []
 
 const data = {
-    date: '',
+    date: newDate,
     temp: '',
     zip: '',
     feelings: ''
@@ -46,25 +46,8 @@ getLocation()
 async function getWeatherData() {
     try {
         const request = await fetch(url + `lat=${locationData[0]}&lon=${locationData[1]}` + apiKey)
-        console.log(await request.json())
-    } catch (err) {
-        console.log(err)
-    }
-}
-// setTimeout(() => {
-//     getWeatherData()
-// }, 2000)
-
-//Submit button handler
-async function submit() {
-    const updateView = () => {
-
-    }
-    try {
-        const request = await fetch('/', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
+        const resData = await request.json()
+        data.temp = resData.main.temp
     } catch (err) {
         console.log(err)
     }
@@ -80,8 +63,59 @@ function zipChange(value) {
 function zipFilter(target) {
     target.value = target.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1')
 }
-
+//Feelings input change handler
 function feelingsChange(value) {
     data.feelings = value
     console.log(data)
+}
+
+//Submit button handler
+async function submit() {
+    //Update UI handler
+    const updateView = (data) => {
+        const date = document.getElementById('date')
+        const temp = document.getElementById('temp')
+        const content = document.getElementById('content')
+        date.innerHTML = `Date: ${data.date}`
+        temp.innerHTML = `Temperature: ${data.temp} °C`
+        const feelings = data.feelings.replace('\n', '<br/>' + Array(15).fill('\xa0').join(''))
+        content.innerHTML = `Zipcode: ${data.zip}<br/> Feelings: ${feelings}`
+        console.log(data.feelings)
+    }
+    //#region check for data before submit
+    if (!data.zip) {
+        alert('Please insert your zipcode')
+        return
+    }
+    if (!data.feelings) {
+        alert('Please insert how you are feeling today')
+        return
+    }
+    //#endregion
+    try {
+        //Get weather data first
+        await getWeatherData()
+        if (!data.temp) {
+            alert('Please enable location detection and refresh the page for the app to work')
+            return
+        }
+        const request = await fetch('/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        const response = await request.json()
+        console.log(response)
+        if (response) {
+            const getData = await fetch('/all')
+            console.log(getData)
+            const serverData = await getData.json()
+            updateView(serverData)
+        }
+    } catch (err) {
+        console.log(err)
+    }
 }
