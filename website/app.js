@@ -20,7 +20,6 @@ function getLocation() {
     const setPosition = (position) => {
         //save location information in global variable location
         locationData = [position.coords.latitude, position.coords.longitude]
-        console.log(locationData)
     }
 
     const geoLocationErrorHandler = (GeolocationPositionError) => {
@@ -56,7 +55,6 @@ async function getWeatherData() {
 //Zip code input change handler
 function zipChange(value) {
     data.zip = value
-    console.log(data)
 }
 
 //Filter Zip code field to only accept numerical values
@@ -66,7 +64,6 @@ function zipFilter(target) {
 //Feelings input change handler
 function feelingsChange(value) {
     data.feelings = value
-    console.log(data)
 }
 
 //Submit button handler
@@ -78,9 +75,9 @@ async function submit() {
         const content = document.getElementById('content')
         date.innerHTML = `Date: ${data.date}`
         temp.innerHTML = `Temperature: ${data.temp} °C`
+        //Formating the feelings section to match the input
         const feelings = data.feelings.replace('\n', '<br/>' + Array(15).fill('\xa0').join(''))
         content.innerHTML = `Zipcode: ${data.zip}<br/> Feelings: ${feelings}`
-        console.log(data.feelings)
     }
     //#region check for data before submit
     if (!data.zip) {
@@ -108,10 +105,8 @@ async function submit() {
             body: JSON.stringify(data)
         })
         const response = await request.json()
-        console.log(response)
         if (response) {
             const getData = await fetch('/all')
-            console.log(getData)
             const serverData = await getData.json()
             updateView(serverData)
         }
